@@ -30,6 +30,7 @@ body {
     padding: 5px;
 }
 .display {
+    width : 250px;
     background: rgb(0, 0, 0);
     align-self: stretch;
     text-align: right;
@@ -37,6 +38,18 @@ body {
     border-radius: 10px;
     font-size: 1.5rem;
     color: white;
+}
+.history {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.expression {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 button {
     border-radius: 5px;

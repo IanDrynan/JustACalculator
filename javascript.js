@@ -32,6 +32,8 @@ const display = document.getElementsByClassName("expression")[0];
 const historyDisplay = document.getElementsByClassName("history")[0];
 let expressionStack = ["0"];
 let history = [" "," "];
+const roundFactor = 1e18;
+const round = (num) => Math.round(num * roundFactor) / roundFactor;
 
 const subtract = (x, y) => parseFloat(x) - parseFloat(y);
 const add = (x, y) => parseFloat(x) + parseFloat(y) ;
@@ -82,6 +84,8 @@ function operate() {
             i--;
         }
     }
+    //rounds number to 15th decimal
+    expressionStack[0] = round(expressionStack[0]);
     updateHistory();
     updateDisplay();
 }
@@ -115,13 +119,18 @@ function handleOperator(op) {
 }
 function clear() {
     expressionStack = ["0"];
+    history = ["Hi there", "I'm a calculator"];
     updateDisplay();
+    updateHistory();
 }
 function backspace() {
-    if (expressionStack.length === 1) {
-        return;
+    let last = expressionStack.pop();
+    if (last.length > 1) {
+        expressionStack.push(last.slice(0, -1));
     }
-    expressionStack.pop();
+    else if (expressionStack.length === 0) {
+        expressionStack.push("0");
+    }
     updateDisplay();
 }
 function floatize() {
@@ -139,7 +148,8 @@ function floatize() {
     updateDisplay();
 }
 function updateDisplay() {
-    display.innerText = expressionStack.join(" ");
+    let expression = expressionStack.join(" ");
+    display.innerText = expression;
 }
 function updateHistory() {
     historyDisplay.innerText = history.join("\n");
