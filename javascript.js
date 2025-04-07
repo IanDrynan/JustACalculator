@@ -32,7 +32,9 @@ const display = document.getElementsByClassName("expression")[0];
 const historyDisplay = document.getElementsByClassName("history")[0];
 let expressionStack = ["0"];
 let history = [" "," "];
-const roundFactor = 1e18;
+let justOperated = false;
+
+const roundFactor = 1e10;
 const round = (num) => Math.round(num * roundFactor) / roundFactor;
 
 const subtract = (x, y) => parseFloat(x) - parseFloat(y);
@@ -47,7 +49,7 @@ function operate() {
         return;
     }
     history.shift();
-    history.push(expressionStack.join(" ") + " =");
+    history.push(expressionStack.join(" ") + " = ");
     //first pass do all multiplication, division, and modulo
     for (let i = 0; i < expressionStack.length; i++ ){
         if (expressionStack[i] === "*") {
@@ -86,15 +88,18 @@ function operate() {
     }
     //rounds number to 15th decimal
     expressionStack[0] = round(expressionStack[0]);
+    history[1] += expressionStack[0];
     updateHistory();
     updateDisplay();
+    justOperated = true;
 }
 function handleNumber(num) {
     let lastNum = expressionStack.slice(-1)[0];
     // check if lastNum is a number or a decimal point
-    if (!Number.isNaN((parseFloat(lastNum))) | lastNum === ".") {
-        if (expressionStack[0] === "0") {
+    if (!Number.isNaN((parseFloat(lastNum))) || lastNum === ".") {
+        if (expressionStack[0] === "0" || justOperated) {
             expressionStack[0] = num;
+            justOperated = false;
         }
         else {
             expressionStack.pop();
